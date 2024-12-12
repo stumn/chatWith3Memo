@@ -29,6 +29,9 @@ const form = $('form');
 const input = $('input');
 const formButton = $('formButton');
 const docsButton = $('docsButton');
+const memoSend1 = $('memoSend1');
+const memoSend2 = $('memoSend2');
+const memoSend3 = $('memoSend3');
 
 let dropElement;
 let loginName;
@@ -702,6 +705,19 @@ function toggleMemoMode(value) {
         formButton.classList.remove('chatButton');
     }
 }
+
+[memoSend1, memoSend2, memoSend3].forEach(memoSend => {
+    memoSend.addEventListener('click', () => {
+        console.log('memoSend: ', memoSend);
+        const memoContent = memoSend.parentElement.querySelector('textarea');
+        console.log('memoContent: ', memoContent);
+        const memo = memoContent.value;
+        console.log('memo: ', memo);
+        if (!memo) { return; }
+        socket.emit('memo', memo);
+        memoContent.value = '';
+    });
+});
 
 input.addEventListener('focus', () => {
     console.log(sendTo.value);

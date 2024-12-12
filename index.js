@@ -168,6 +168,18 @@ io.on('connection', async (socket) => {
       socket.broadcast.emit('downCard', postSet);
     });
 
+    socket.on('memo', async (memo) => {
+      const record = await SavePersonalMemo(name, memo);
+      console.log('メモ送信ボタンが押されたとき', record);
+      const organizedMemo = {
+        id: record._id,
+        name: record.name,
+        msg: record.msg,
+        createdAt: record.createdAt
+      }
+      socket.emit('memoLogs', organizedMemo); // 自分だけに送信
+    });
+
     socket.on('undisclosedMemoDrop', async (memoId, dropId) => { // 重ねてオープン
       console.log('undisclosedMemoDrop memoID: ', memoId, 'dropId: ', dropId);
       const memo = await findMemo(memoId);
